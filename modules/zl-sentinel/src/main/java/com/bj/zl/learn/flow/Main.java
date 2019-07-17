@@ -58,7 +58,7 @@ public class Main {
     /**
      * limitApp
      *
-     * 测试失败
+     * //需要自己识别来源，区分后采用ContextUtil.enter("testAnnotationHandlerLimitApp", "caller1");将请求与资源绑定
      * @return
      */
     @Test
@@ -66,7 +66,6 @@ public class Main {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring/applicationContext.xml");
 
         FlowRuleUtil.initRule2();
-        ContextUtil.enter("testAnnotationHandlerLimitApp", "caller1");//讲资源与限制的来源绑定
         SentinelResourceServiceImpl sentinelResourceService = (SentinelResourceServiceImpl) context.getBean("sentinelResourceService");
         int i = 0;
         while (true){
@@ -75,15 +74,16 @@ public class Main {
             if (i%2==0){
                 logStr=sentinelResourceService.testAnnotationHandlerLimitApp("defaultsss",i);
             }else {
+                ContextUtil.enter("testAnnotationHandlerLimitApp", "caller1");//讲资源与限制的来源绑定
                 logStr= sentinelResourceService.testAnnotationHandlerLimitApp("caller1",i);
+                ContextUtil.exit();
             }
             System.out.println(logStr);
             if(i>100){
-                return;
+                break;
             }
 
         }
-
     }
 
 }

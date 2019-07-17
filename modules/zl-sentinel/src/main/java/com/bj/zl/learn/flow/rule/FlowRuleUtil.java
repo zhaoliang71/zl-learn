@@ -65,7 +65,7 @@ public class FlowRuleUtil {
 
         List<FlowRule> ruleList = new ArrayList<>();
         ruleList.add(rule);//同一个资源可以创建多条限流规则。FlowSlot 会对该资源的所有限流规则依次遍历，直到有规则触发限流或者所有规则遍历完毕
-        ruleList.add(rule1);//同一个资源可以创建多条限流规则。FlowSlot 会对该资源的所有限流规则依次遍历，直到有规则触发限流或者所有规则遍历完毕
+        //ruleList.add(rule1);//同一个资源可以创建多条限流规则。FlowSlot 会对该资源的所有限流规则依次遍历，直到有规则触发限流或者所有规则遍历完毕
         FlowRuleManager.loadRules(ruleList);
     }
 }
