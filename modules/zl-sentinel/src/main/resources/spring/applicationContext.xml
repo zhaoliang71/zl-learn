@@ -27,5 +27,6 @@
         <aop:aspectj-autoproxy proxy-target-class="false"/><!--声明自动为spring容器中那些配置@aspectJ切面的bean创建代理，织入切面,true使用CGLib动态代理技术织入增强,false表示使用jdk动态代理织入增强-->
 
         <bean id="sentinelResourceService" class="com.bj.zl.learn.flow.service.SentinelResourceServiceImpl"/>
+        <bean id="sentinelDegradeService" class="com.bj.zl.learn.degrade.service.SentinelDegradeServiceImpl"/>
 
 </beans>
