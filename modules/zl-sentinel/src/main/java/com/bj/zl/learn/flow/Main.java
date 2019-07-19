@@ -50,7 +50,7 @@ public class Main {
         while (true){
             String logStr = sentinelResourceService.annotationTestFall(i++);
             System.out.println(logStr);
-            if(i>100){
+            if(i>0){
                 return;
             }
         }
