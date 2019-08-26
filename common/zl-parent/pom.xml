@@ -96,7 +96,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
-            <!-- <scope>test</scope>-->
+            <!-- <scope>properties</scope>-->
         </dependency>
         <!--spring end-->
 
@@ -249,13 +249,13 @@
 
     <profiles>
         <profile>
-            <id>test</id>
+            <id>properties</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
                 <spring.active>spring</spring.active>
-                <profiles.active>test</profiles.active>
+                <profiles.active>properties</profiles.active>
             </properties>
         </profile>
 

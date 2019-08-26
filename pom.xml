@@ -14,6 +14,7 @@
         <module>common/zl-parent</module>
         <module>common/zl-contract</module>
         <module>modules/zl-sentinel</module>
+        <module>modules/zl-zookeeper</module>
     </modules>
 
 
