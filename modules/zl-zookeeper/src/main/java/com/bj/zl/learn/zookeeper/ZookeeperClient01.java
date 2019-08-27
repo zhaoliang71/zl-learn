@@ -72,7 +72,7 @@ public class ZookeeperClient01 {
         System.out.println(new String(bytes));
 
         List<String> children = zooKeeper.getChildren(ZNODE, false, stat);
-
+        //[CHLID]
         children.forEach((String child)->{
                     System.out.println(children);
                 });
