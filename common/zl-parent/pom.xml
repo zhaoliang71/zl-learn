@@ -12,7 +12,7 @@
     <properties>
         <spring.version>4.3.12.RELEASE</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <compileSource>1.7</compileSource>
+        <compileSource>1.8</compileSource>
         <surefire-skipTests>true</surefire-skipTests>
     </properties>
 
