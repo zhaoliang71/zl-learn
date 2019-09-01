@@ -34,6 +34,20 @@
             <artifactId>zkclient</artifactId>
             <version>0.10</version>
         </dependency>
+        <!--Curator 客户端 start-->
+        <!--https://mvnrepository.com/artifact/org.apache.curator/curator-recipes/4.2.0-->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <!--https://mvnrepository.com/artifact/org.apache.curator/curator-framework/4.2.0-->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <!--Curator 客户端 end-->
     </dependencies>
 
 
