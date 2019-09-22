@@ -29,6 +29,14 @@ public class CuratorClient {
 
     private CuratorFramework client = null;
 
+    public CuratorFramework getClient() {
+        return client;
+    }
+
+    public void setClient(CuratorFramework client) {
+        this.client = client;
+    }
+
     public CuratorClient() {
         //重试策略,重试3次,间隔2S
         RetryPolicy retryPolicy = new RetryNTimes(3,2000);

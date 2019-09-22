@@ -2,19 +2,59 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop.xsd">
+       http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 
         <description>Spring公共配置</description>
         <context:annotation-config />
         <context:component-scan base-package="com.bj.zl.learn.*"/>
 
+        <!-- submit 数据源配置 begin -->
+        <bean id="submitDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+              destroy-method="close">
+                <property name="validationQuery" value="SELECT 1"/>
+                <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://192.168.159.74:3306/submit_id"/>
+                <property name="username" value="promise"/>
+                <property name="password" value="promise"/>
 
+                <property name="defaultAutoCommit" value="true"/>
+                <property name="timeBetweenEvictionRunsMillis" value="3600000"/>
+                <property name="minEvictableIdleTimeMillis" value="3600000"/>
+        </bean>
+
+        <bean id="submitTransactionManager"
+              class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+                <property name="dataSource" ref="submitDataSource"/>
+        </bean>
+
+        <tx:annotation-driven transaction-manager="submitTransactionManager"
+                              proxy-target-class="true"/>
+
+        <bean id="submitSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+                <property name="dataSource" ref="submitDataSource"/>
+                <property name="configLocation" value="classpath:spring/mapper-config.xml"/>
+        </bean>
+        <bean id="submitSqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+                <constructor-arg index="0" ref="submitSqlSessionFactory"/>
+        </bean>
+        <!-- submit 数据源配置 end -->
+
+
+        <bean id="submitJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+                <property name="dataSource" ref="submitDataSource"/>
+        </bean>
+
+        <!--激活读取properties文件-->
+        <!--<context:property-placeholder location="classpath:jdbc.properties"/>-->
+
+        <!--扫描基本包，得到包下带bean注解的bean对象-->
+        <context:component-scan base-package="com.bj.zl"/>
 
 </beans>
