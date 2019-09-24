@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://dubbo.apache.org/schema/dubbo
+       http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+        <!--spring 和 dubbo整合在一起(基于spring scheme文件扩展)-->
+        <!--该配置是结算服务依赖关系的,可以是配置成项目名称-->
+        <dubbo:application name="zl-dubbo-provider"/>
+        <!--暴露服务,让其他服务可以调用-->
+        <dubbo:service interface="com.bj.zl.learn.contract.service.UserService"
+                       ref="userService"/>
+
+</beans>

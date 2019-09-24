@@ -15,6 +15,9 @@
         <module>common/zl-contract</module>
         <module>modules/zl-sentinel</module>
         <module>modules/zl-zookeeper</module>
+        <module>modules/zl-dubbo-consumer</module>
+        <module>modules/zl-dubbo-provider</module>
+        <module>modules/zl-dubbo-api</module>
     </modules>
 
 

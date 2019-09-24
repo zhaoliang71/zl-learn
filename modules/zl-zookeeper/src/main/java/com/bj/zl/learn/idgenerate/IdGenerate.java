@@ -5,7 +5,6 @@
 package com.bj.zl.learn.idgenerate;
 
 import com.bj.zl.learn.curator.CuratorClient;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import org.apache.zookeeper.CreateMode;
 
 import java.util.concurrent.CountDownLatch;
