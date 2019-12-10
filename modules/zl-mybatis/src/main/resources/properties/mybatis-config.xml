@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--mybatis框架的核心功能可以通过该配置进行设置-->
+
+    <!--配置属性-->
+    <properties resource="jdbc.properties"/>
+    <!--mybatis 核心配置 https://mybatis.org/mybatis-3/zh/configuration.html 可以参考-->
+    <settings>
+        <setting name="logImpl" value="SLF4J"/>
+    </settings>
+    <!--类型别名-->
+    <typeAliases>
+        <typeAlias type="com.bj.zl.learn.mybatis.model.OOrderInfo" alias="oorderInfo"/>
+    </typeAliases>
+    <!--类型转换器,将一个数据库类型 与Java类型相转换-->
+    <!--<typeHandlers>
+        <typeHandler handler="org.apache.ibatis.type.IntegerTypeHandler" javaType="java.lang.Integer" jdbcType="int"/>
+    </typeHandlers>-->
+    <!--对象工厂 不建议修改-->
+   <!-- <objectFactory type=""/>-->
+    <!--插件-->
+    <!--<plugins>
+        <plugin interceptor=""></plugin>
+    </plugins>-->
+    <!--环境配置-->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--数据库厂商标识-->
+    <!--<databaseIdProvider type=""/>-->
+
+    <!--映射器-->
+    <mappers>
+        <!--<mapper resource="com/bj/zl/learn/mybatis/mapper/IdCardMapper.xml"/>
+
+        <mapper resource="com/bj/zl/learn/mybatis/mapper/PersonMapper.xml"/>-->
+    </mappers>
+</configuration>

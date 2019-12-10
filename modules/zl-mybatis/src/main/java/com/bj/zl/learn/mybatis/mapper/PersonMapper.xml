@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj.zl.learn.mybatis.mapper.PersonMapper">
+
+  <resultMap id="BaseResultMap" type="com.bjpowernode.mybatis.model.Person">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="nick" jdbcType="VARCHAR" property="nick" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+  </resultMap>
+
+
+  <resultMap id="OneToOneBaseResultMap" type="com.bjpowernode.mybatis.model.Person">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="nick" jdbcType="VARCHAR" property="nick" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <association property="idCard" javaType="com.bjpowernode.mybatis.model.IdCard">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="personId" jdbcType="INTEGER" property="personid" />
+      <result column="realName" jdbcType="VARCHAR" property="realname" />
+      <result column="idCard" jdbcType="VARCHAR" property="idcard" />
+    </association>
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    id, nick, phone, sex
+  </sql>
+
+  <sql id="Person_Column_List">
+    p.id, p.nick, p.phone, p.sex
+  </sql>
+
+  <sql id="Idcard_Column_List">
+    i.id, i.personId, i.realName, i.idCard
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from person
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="OneToOneBaseResultMap">
+    select
+    <include refid="Person_Column_List" />,
+    <include refid="Idcard_Column_List" />
+    from person p left join idcard i on p.id = i.personId
+    where p.id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from person
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bjpowernode.mybatis.model.Person">
+    insert into person (id, nick, phone, 
+      sex)
+    values (#{id,jdbcType=INTEGER}, #{nick,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bjpowernode.mybatis.model.Person">
+    insert into person
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="nick != null">
+        nick,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="nick != null">
+        #{nick,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.mybatis.model.Person">
+    update person
+    <set>
+      <if test="nick != null">
+        nick = #{nick,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bjpowernode.mybatis.model.Person">
+    update person
+    set nick = #{nick,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

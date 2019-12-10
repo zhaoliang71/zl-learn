@@ -18,6 +18,8 @@
         <module>modules/zl-dubbo-consumer</module>
         <module>modules/zl-dubbo-provider</module>
         <module>modules/zl-dubbo-api</module>
+        <module>modules/zl-mybatis</module>
+        <module>modules/zl-mybatis-write</module>
     </modules>
 
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        SYSTEM
+        "zl-learn/modules/zl-mybatis-write/src/main/java/com/bj/zl/learn/mybatis/parsing/mybatis-1.0-config.dtd">
+<configuration>
+
+    <!--环境配置-->
+    <environment>
+        <dataSource id="dev">
+            <property name="driver" value="com.mysql.jdbc.Driver"/>
+            <property name="url" value="jdbc:mysql://127.0.0.1:3306/test"/>
+            <property name="username" value="root"/>
+            <property name="password" value="root"/>
+        </dataSource>
+
+        <dataSource id="pro">
+            <property name="driver" value="com.mysql.jdbc.Driver"/>
+            <property name="url" value="jdbc:mysql://127.0.0.1:3306/test"/>
+            <property name="username" value="root"/>
+            <property name="password" value="root"/>
+        </dataSource>
+    </environment>
+
+
+    <!--映射器-->
+    <mappers>
+        <mapper resource="com/bj/zl/learn/mybatis/mapper/OOrderInfoMapper.xml"/>
+    </mappers>
+</configuration>

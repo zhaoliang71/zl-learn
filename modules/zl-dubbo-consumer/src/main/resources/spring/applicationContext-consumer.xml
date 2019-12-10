@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://dubbo.apache.org/schema/dubbo
+       http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+
+
+    <!--该配置是结算服务依赖关系的,可以是配置成项目名称-->
+    <dubbo:application name="zl-dubbo-consumer"/>
+
+
+    <!--dubbo引用远程服务,底层是TCP连接,端口默认是20880-->
+    <!--目前是采用直连的方式, 没有注册中心,URL指定连接地址-->
+    <!--<dubbo:reference id="userService" interface="com.bj.zl.learn.contract.service.UserService"
+                     url="127.0.0.1:20880"/>
+-->
+
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+    <dubbo:reference id="userService" interface="com.bj.zl.learn.contract.service.UserService"/>
+
+
+</beans>

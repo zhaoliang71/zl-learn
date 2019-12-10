@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>com.bj.zl.learn</groupId>
-    <artifactId>zl-dubbo-provider</artifactId>
+    <artifactId>zl-mybatis</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <!--指定maven编译级别，还可以使用maven插件来指定-->
@@ -28,38 +28,24 @@
             <artifactId>lombok</artifactId>
             <version>1.18.8</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.dubbo/dubbo -->
+        <!--mybatis框架的jar包依赖-->
         <dependency>
-            <groupId>org.apache.dubbo</groupId>
-            <artifactId>dubbo</artifactId>
-            <version>2.7.3</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-context</artifactId>
-                    <groupId>org.springframework</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.1</version>
         </dependency>
 
+        <!--mysql的jdbc驱动jar包依赖-->
         <dependency>
-            <groupId>com.bj.zl.learn</groupId>
-            <artifactId>zl-dubbo-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.47</version>
         </dependency>
-        <!-- 使用zookeeper注册中心,需要加jar包-->
+
         <dependency>
-            <groupId>org.apache.curator</groupId>
-            <artifactId>curator-recipes</artifactId>
-            <version>4.0.0</version>
-        </dependency>
-        <!--zookeeper原生Java客户端 -->
-        <!--org.apache.zookeeper.KeeperException$UnimplementedException: KeeperErrorCode
-        可能是zookeeper与curator版本不匹配-->
-        <dependency>
-            <groupId>org.apache.zookeeper</groupId>
-            <artifactId>zookeeper</artifactId>
-            <version>3.4.8</version>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.19.0-GA</version>
         </dependency>
     </dependencies>
 

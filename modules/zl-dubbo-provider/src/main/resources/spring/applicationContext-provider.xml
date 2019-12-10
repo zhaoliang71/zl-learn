@@ -10,7 +10,17 @@
         <!--该配置是结算服务依赖关系的,可以是配置成项目名称-->
         <dubbo:application name="zl-dubbo-provider"/>
         <!--暴露服务,让其他服务可以调用-->
+       <!-- <dubbo:service interface="com.bj.zl.learn.contract.service.UserService"
+                       ref="userService" registry="N/A"/>&lt;!&ndash;registry="N/A" 表示没有注册中心&ndash;&gt;
+        -->
+        <!--以zookeeper作为注册中心-->
+        <!--
+        zookeeper 集群配置方式
+        <dubbo:registry address="zookeeper://127.0.0.1:2181?backup=127.0.0.3:2181,127.0.0.3:2181,127.0.0.2:2181"/>
+        <dubbo:registry protocol="zookeeper" address="127.0.0.3:2181,127.0.0.3:2181,127.0.0.2:2181"/>
+        -->
+        <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+        <!--retries="2" 禁止重试设为0 provider与consumer都有的话,以consumer为准-->
         <dubbo:service interface="com.bj.zl.learn.contract.service.UserService"
-                       ref="userService"/>
-
+                       ref="userService" retries="2"/>
 </beans>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj.zl.learn.mybatis.mapper.OOrderInfoMapper">
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType=" com.bj.zl.learn.mybatis.domain.OOrderInfo">
+    select 
+      id, order_no, order_desc, order_time, order_status, order_money, pay_type, is_pay,
+      user_id, user_name, user_address, user_phone
+    from o_order_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+</mapper>

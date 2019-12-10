@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj.zl.learn.mybatis.mapper.IdCardMapper">
+
+
+  <!--可以用工具自动生成-->
+  <resultMap id="BaseResultMap" type="com.bjpowernode.mybatis.model.IdCard">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="personId" jdbcType="INTEGER" property="personid" />
+    <result column="realName" jdbcType="VARCHAR" property="realname" />
+    <result column="idCard" jdbcType="VARCHAR" property="idcard" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, personId, realName, idCard
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from idcard
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from idcard
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bjpowernode.mybatis.model.IdCard">
+    insert into idcard (id, personId, realName, 
+      idCard)
+    values (#{id,jdbcType=INTEGER}, #{personid,jdbcType=INTEGER}, #{realname,jdbcType=VARCHAR}, 
+      #{idcard,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bjpowernode.mybatis.model.IdCard">
+    insert into idcard
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="personid != null">
+        personId,
+      </if>
+      <if test="realname != null">
+        realName,
+      </if>
+      <if test="idcard != null">
+        idCard,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="personid != null">
+        #{personid,jdbcType=INTEGER},
+      </if>
+      <if test="realname != null">
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null">
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.mybatis.model.IdCard">
+    update idcard
+    <set>
+      <if test="personid != null">
+        personId = #{personid,jdbcType=INTEGER},
+      </if>
+      <if test="realname != null">
+        realName = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null">
+        idCard = #{idcard,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bjpowernode.mybatis.model.IdCard">
+    update idcard
+    set personId = #{personid,jdbcType=INTEGER},
+      realName = #{realname,jdbcType=VARCHAR},
+      idCard = #{idcard,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
