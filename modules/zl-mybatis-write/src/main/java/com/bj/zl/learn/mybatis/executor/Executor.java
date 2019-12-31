@@ -41,7 +41,8 @@ public class Executor {
         Connection connection= null;
         try {
             //从数据源池获取连接
-            connection = dataSourcePool.getConnection();
+            connection = dataSourcePool.getConnection(configuration.getEnvironment().getDataSources().get("dev").getUsername(),
+                    configuration.getEnvironment().getDataSources().get("dev").getPassword());
 
             //预编译
             String sql = SQLTokenParser.parse(configuration.getMapperStatementMap().get(key).getSql());
