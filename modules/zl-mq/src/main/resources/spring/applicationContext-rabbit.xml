@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/rabbit
+       https://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+       http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+        <!--扫描一下 bean-->
+        <context:component-scan base-package="com.bj.zl.learn.rabbitMq.spring"/>
+
+        <!--配置connection-factory，指定连接rabbit服务器 -->
+        <rabbit:connection-factory id="connectionFactory"
+                                   virtual-host="/" username="guest" password="guest" host="192.168.109.133" port="5672" />
+
+        <!--配置rabbitmq admin，通过admin来自动生成exchange和queue -->
+        <rabbit:admin id="connectAdmin" connection-factory="connectionFactory" />
+
+        <!--*********************************************************************-->
+
+        <!--配置rabbitmq template用于消息的发送和接收 -->
+        <rabbit:template id="directTemplate" connection-factory="connectionFactory" exchange="spring.direct.exchange" />
+
+        <!--声明一个直连交换机direct exchange，绑定到队列spring.direct.queue -->
+        <rabbit:direct-exchange name="spring.direct.exchange" durable="true" auto-delete="false" declared-by="connectAdmin">
+                <rabbit:bindings>
+                        <rabbit:binding queue="spring.direct.queue1" key="directKey"/>
+                        <rabbit:binding queue="spring.direct.queue2" key="directKey"/>
+                </rabbit:bindings>
+        </rabbit:direct-exchange>
+
+        <!--声明一个队列queue -->
+        <rabbit:queue name="spring.direct.queue1" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin" />
+        <!--声明一个队列queue -->
+        <rabbit:queue name="spring.direct.queue2" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin" />
+
+        <!--Direct直连消息接收者 -->
+        <bean id="directConsumer" class="com.bj.zl.learn.rabbitMq.spring.DirectConsumer"/>
+
+        <!-- 队列Queue监听，当有消息到达时会回调监听在对应的队列上的监听器对象的onMessage方法 -->
+        <rabbit:listener-container connection-factory="connectionFactory">
+            <rabbit:listener queues="spring.direct.queue1" ref="directConsumer" />
+        </rabbit:listener-container>
+
+
+        <!--*********************************************************************-->
+<!--
+        &lt;!&ndash;配置rabbitmq template用于消息的发送和接收 &ndash;&gt;
+        <rabbit:template id="topicTemplate" connection-factory="connectionFactory" exchange="spring.topic.exchange" />
+
+        &lt;!&ndash; 定义topic exchange，绑定spring.topic.queue &ndash;&gt;
+        <rabbit:topic-exchange name="spring.topic.exchange" durable="true" auto-delete="false" declared-by="connectAdmin">
+                <rabbit:bindings>
+                        <rabbit:binding queue="spring.topic.queue" pattern="#.topicKey.#"></rabbit:binding>
+                </rabbit:bindings>
+        </rabbit:topic-exchange>
+
+        &lt;!&ndash;定义queue &ndash;&gt;
+        <rabbit:queue name="spring.topic.queue" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin" />
+
+        &lt;!&ndash; 消息接收者 &ndash;&gt;
+        <bean id="topicConsumer" class="com.bjpowernode.spring.consumer.TopicConsumer"></bean>
+
+        &lt;!&ndash; 队列Queue监听，当有消息到达时会回调监听在对应的队列上的监听器对象的onMessage方法 &ndash;&gt;
+        <rabbit:listener-container connection-factory="connectionFactory">
+                <rabbit:listener queues="spring.topic.queue" ref="topicConsumer" />
+        </rabbit:listener-container>
+
+
+        &lt;!&ndash;*********************************************************************&ndash;&gt;
+
+
+
+        &lt;!&ndash;配置rabbitmq template用于消息的发送和接收 &ndash;&gt;
+        <rabbit:template id="fanoutTemplate" connection-factory="connectionFactory" exchange="spring.fanout.exchange" />
+
+        &lt;!&ndash; 定义fanout exchange，绑定spring.direct.queue 和 spring.topic.queue &ndash;&gt;
+        <rabbit:fanout-exchange name="spring.fanout.exchange" auto-delete="false" durable="true" declared-by="connectAdmin" >
+                <rabbit:bindings>
+                        <rabbit:binding queue="spring.fanout.queue"></rabbit:binding>
+                        &lt;!&ndash;<rabbit:binding queue="spring.direct.queue"></rabbit:binding>&ndash;&gt;
+                        <rabbit:binding queue="spring.topic.queue"></rabbit:binding>
+                </rabbit:bindings>
+        </rabbit:fanout-exchange>
+
+        &lt;!&ndash;定义queue &ndash;&gt;
+        <rabbit:queue name="spring.fanout.queue" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin" />
+
+        &lt;!&ndash; 消息接收者 &ndash;&gt;
+        <bean id="fanoutConsumer" class="com.bjpowernode.spring.consumer.FanoutConsumer"></bean>
+
+        &lt;!&ndash; 队列Queue监听，当有消息到达时会回调监听在对应的队列上的监听器对象的onMessage方法 &ndash;&gt;
+        <rabbit:listener-container connection-factory="connectionFactory">
+                <rabbit:listener queues="spring.fanout.queue" ref="fanoutConsumer" />
+        </rabbit:listener-container>-->
+
+</beans>

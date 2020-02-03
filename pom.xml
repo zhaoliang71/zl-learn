@@ -20,6 +20,9 @@
         <module>modules/zl-dubbo-api</module>
         <module>modules/zl-mybatis</module>
         <module>modules/zl-mybatis-write</module>
+        <module>modules/zl-redis</module>
+        <module>modules/zl-mq</module>
+        <module>modules/zl-jvm</module>
     </modules>
 
 

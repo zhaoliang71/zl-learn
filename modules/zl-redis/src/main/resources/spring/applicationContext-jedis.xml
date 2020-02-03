@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+        <description>Spring整合jedis + 监听通知</description>
+        <!--jedis 连接工厂-->
+        <bean id="jedis" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+                <constructor-arg index="0" ref="redisSource"/>
+        </bean>
+        <!--redis 配置-->
+        <bean id="redisSource" class="org.springframework.data.redis.connection.RedisStandaloneConfiguration">
+                <property name="hostName" value="127.0.0.1"/>
+                <property name="port" value="6379"/>
+                <property name="database" value="0"/>
+                <!--<property name="password" red="password"/>-->
+        </bean>
+
+        <!--<bean id="password" class="org.springframework.data.redis.connection.RedisPassword">
+                <constructor-arg index="0" value="123456"/>
+        </bean>-->
+        <!--redis 操作模板-->
+        <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+                <property name="connectionFactory" ref="jedis"/>
+        </bean>
+        <!--通知的监听器-->
+       <!-- <bean class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter" id="messageListener">
+                <constructor-arg>
+                        <bean class="com.bj.zl.learn.redis.jedis.noifty.NotifyListener"/>
+                </constructor-arg>
+        </bean>
+        <bean class="org.springframework.data.redis.listener.RedisMessageListenerContainer" id="container">
+                <property name="connectionFactory" ref="jedis"/>
+                <property name="messageListeners">
+                        <map>
+                                <entry key-ref="messageListener">
+                                        <list>
+                                                <bean class="org.springframework.data.redis.listener.PatternTopic">
+                                                        <constructor-arg value="_key*_:expire"/>
+                                                </bean>
+                                        </list>
+                                </entry>
+                        </map>
+                </property>
+        </bean>-->
+
+
+</beans>
