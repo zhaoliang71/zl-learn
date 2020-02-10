@@ -23,6 +23,8 @@
         <module>modules/zl-redis</module>
         <module>modules/zl-mq</module>
         <module>modules/zl-jvm</module>
+        <module>modules/zl-concurrent</module>
+        <module>modules/zl-spring</module>
     </modules>
 
 

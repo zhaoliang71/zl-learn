@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/context
+	   https://www.springframework.org/schema/context/spring-context.xsd
+	   http://www.springframework.org/schema/tx
+	   http://www.springframework.org/schema/tx/spring-tx.xsd
+	   http://www.springframework.org/schema/aop
+	   https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!--激活读取properties文件-->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+
+	<!--扫描基本包，得到包下带bean注解的bean对象-->
+	<context:component-scan base-package="com.bj.zl.learn.tx"/>
+
+	<!--配置数据源-->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<!--配置mybatis工厂bean：SqlSessionFactoryBean-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+	</bean>
+
+	<!--配置mybatis mapper包扫描-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!--mapper接口变成spring容器的bean对象-->
+		<property name="basePackage" value="com.bj.zl.learn.tx.mapper"/>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+	</bean>
+
+	<!--配置数据源事务管理器,spring框架高度抽象出来的一个类-->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	<!-- 定义事aop通知被执行的事务语义-->
+	<!--<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		&lt;!&ndash; 事务语义属性配置 &ndash;&gt;
+			&lt;!&ndash; 定义方法的事务属性：只读，隔离级别，传播行为，回滚规则，超时时间 &ndash;&gt;
+			&lt;!&ndash;
+			read-only : true表示只读，表示数据库的连接是否是只读的，只能用于查询操作，不能用来增、删、改操作，默认是false
+
+			rollback-for :发生这个异常的时候回滚
+			no-rollback-for:发生这个异常不回滚
+			rollback-for : 如果没有配置，默认情况下是代码发生运行时异常或者Error错误，Spring事务会进行回滚，
+			非运行时异常(检查式异常、编译时异常)Exception则不会回滚，
+
+		    可以通过rollback-for指定需要回滚的检查式异常，指定异常之后，被指定的异常和该异常的子类都会得到回滚，
+			并且运行时异常和Error异常仍然会得到回滚
+
+			rollback-for 和 no-rollback-for
+			当rollback-for配置为检查式异常，那么会覆盖掉 no-rollback-for 配置项目，也就是no-rollback-for配置就无效
+			当rollback-for配置为运行时异常，那么不会覆盖掉 no-rollback-for 配置项目，也就是no-rollback-for配置是有效
+			与两个配置项的顺序无关
+
+			注意：如果异常被try {} catch {}了，事务就不回滚，如果想让事务回滚必须异常再往外抛出try {} catch {throw Exception}
+
+			timeout : 事务超时时间，mysql默认的超时时间为50秒，oracle 60秒
+			          通过语句查看： show variables like 'innodb_lock_wait_timeout';
+			          可修改mysql的配置文件my.cnf，innodb_lock_wait_timeout=50
+
+			          -1 表示使用数据库默认的事务超时时间，单位是秒
+			          5 表示超时时间5秒，单位是秒，配置是几，就是几秒超时
+			          从事务方法执行开始计时
+
+
+
+
+			 isolation:事务的隔离级别
+					隔离级别
+					查询数据库当前的事务隔离级别：
+					MySQL 默认采用的 REPEATABLE_READ隔离级别（可重复读）；
+					Oracle 默认采用的 READ_COMMITTED隔离级别（读已提交）；
+					TransactionDefinition 接口中定义了五个表示隔离级别的常量：
+					TransactionDefinition.ISOLATION_DEFAULT: 使用后端数据库默认的隔离级别；
+
+					查询和设置数据库隔离级别
+					SELECT @@tx_isolation;
+					SET SESSION tx_isolation='READ-UNCOMMITTED';
+
+				TransactionDefinition.ISOLATION_READ_UNCOMMITTED:
+				读未提交，一个事务能读取到另一个事务还未提交的数据，这个叫读未提交，这种事务隔离级别可能产生脏读，因为如果另一个事务将数据回滚，
+				那么第一个事务读取的数据就是脏数据，数据库最终并没有这条数据，这种方式几乎不用，可能会导致脏读、幻读或不可重复读；
+				加锁原理：
+				事务在读数据的时候并未对数据加锁。
+				事务在修改数据的时候对数据增加行级排他锁，直到事务结束才释放。
+				共享锁(Share Lock)
+				共享锁又称读锁，是读取操作创建的锁，其他用户可以并发读取数据，但任何事务都不能对数据进行修改（获取数据上的排他锁），直到已释放所有共享锁。
+				如果事务T对数据A加上共享锁后，则其他事务只能对A再加共享锁，不能加排他锁，获得共享锁的事务只能读数据，不能修改数据。
+				用法
+				SELECT ... LOCK IN SHARE MODE;
+				排他锁（Exclusive Lock）
+				排他锁又称写锁，如果事务T对数据A加上排他锁后，则其他事务不能再对A加任任何类型的锁，获得排他锁的事务既能读数据，又能修改数据。
+				用法
+				SELECT ... FOR UPDATE; （悲观锁）
+				在查询语句后增加FOR UPDATE，MySQL会对查询结果中的每行数据都添加排他锁，当没有其他线程对查询结果集中的任何一行使用排他锁时，可以成功申请排他锁，否则会被阻塞。
+				TransactionDefinition.ISOLATION_READ_COMMITTED:
+				读已提交，一个事务提交的数据在另一个事务中才能读取到，没有提交则读取不到，可以预防脏读，但是会带来另一个问题，那就是“不可重复读”，也叫 原始读取不可重复，
+				什么意思：就是在同一个事务中，每次读取数据库，读取到的数据条数都不一致，因为有别的事务在提交事务。
+				TransactionDefinition.ISOLATION_REPEATABLE_READ:
+				可重复读，一个事务提交的数据，在另一个事务中依然也读取不到，也就是一个事务在开始读取数据时就做了标记一样，只能读取当此刻的数据，后面数据库发生的变化，这个读取事务是无法感知的，是读不到的，那么这样也有一个问题，那就是幻读，读取到的数据与数据库真实的数据不一致，产生了幻像；MySQL默认是此级别；
+				TransactionDefinition.ISOLATION_SERIALIZABLE:
+				串行化，一个事务在操作数据的时候会把该表锁住，其他事务只能等待，这种级别可以解决上面的幻读，但是这种方式的效率极低，它锁住整个表，但是这将严重影响程序的性能，通常情况下也不会用到该级别。
+
+
+
+			 propagation:传播行为
+			&ndash;&gt;
+		<tx:attributes >
+			&lt;!&ndash;匹配方法&ndash;&gt;
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="*get*" read-only="true" />
+			<tx:method name="select*" read-only="true" />
+			<tx:method name="query*" read-only="true" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="add*" read-only="false" isolation="REPEATABLE_READ" propagation="REQUIRED" no-rollback-for="FileNotFoundException" rollback-for="Throwable" timeout="-1"/>
+			<tx:method name="insert*" read-only="false" isolation="REPEATABLE_READ" propagation="REQUIRED" no-rollback-for="FileNotFoundException" rollback-for="Throwable" timeout="-1"/>
+			<tx:method name="save*" read-only="false" isolation="REPEATABLE_READ" propagation="REQUIRED" no-rollback-for="FileNotFoundException" rollback-for="Throwable" timeout="-1"/>
+			<tx:method name="delete*" read-only="false" isolation="REPEATABLE_READ" propagation="REQUIRED" no-rollback-for="FileNotFoundException" rollback-for="Throwable" timeout="-1"/>
+			<tx:method name="remove*" read-only="false" isolation="REPEATABLE_READ" propagation="REQUIRED" no-rollback-for="FileNotFoundException" rollback-for="Throwable" timeout="-1"/>
+			<tx:method name="update*" read-only="false" isolation="REPEATABLE_READ" propagation="REQUIRED" rollback-for="Exception" no-rollback-for="FileNotFoundException" timeout="-1"/>
+		</tx:attributes>
+	</tx:advice>
+
+	&lt;!&ndash; aop配置 &ndash;&gt;
+	<aop:config expose-proxy="false" proxy-target-class="false">
+		&lt;!&ndash;定义切入点&ndash;&gt;
+		<aop:pointcut id="serviceOperation" expression="execution(* com.bj.zl.learn.tx.service..*(..))"/>
+		&lt;!&ndash;通知&ndash;&gt;
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation"/>
+	</aop:config>
+	-->
+</beans>

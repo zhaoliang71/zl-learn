@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--导入spring mvc配置文件-->
+	<!--<import resource="applicationContext-mvc.xml"/>-->
+	<import resource="applicationContext-jdbc.xml"/>
+
+	<bean id="goodsServiceImpl" class="com.bj.zl.learn.tx.service.impl.GoodsServiceImpl"></bean>
+
+</beans>
