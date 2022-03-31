@@ -10,7 +10,7 @@
     <packaging>pom</packaging> <!--父级项目的packaging都为pom  不配置的话默认为jar-->
 
     <properties>
-        <spring.version>5.1.8.RELEASE</spring.version>
+        <spring.version>5.3.18</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <compileSource>1.8</compileSource>
         <surefire-skipTests>true</surefire-skipTests>
